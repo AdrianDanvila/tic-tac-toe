@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
-const socket = new WebSocket("ws://localhost:8080");
+const socket = new WebSocket("ws://tic-tac-toe-be-g6ec.onrender.com");
 const gameId = "partida-1"; // Puedes hacer esto dinámico en el futuro
 
 export default function TicTacToe() {
