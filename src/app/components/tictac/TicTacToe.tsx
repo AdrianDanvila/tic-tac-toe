@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 
 const socket = new WebSocket("ws://localhost:8080");
@@ -7,7 +7,7 @@ const gameId = "partida-1"; // Puedes hacer esto dinámico en el futuro
 export default function TicTacToe() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [turn, setTurn] = useState("X");
-  const [player, setPlayer] = useState<String | null>(null);
+  const [player, setPlayer] = useState<string | null>(null);
 
   useEffect(() => {
     socket.onopen = () => {
