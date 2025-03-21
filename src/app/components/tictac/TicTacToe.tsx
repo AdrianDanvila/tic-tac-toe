@@ -6,17 +6,22 @@ const gameId = "partida-1";
 
 export default function TicTacToe() {
   const [board, setBoard] = useState(Array(9).fill(null));
+  const [games, setGames] = useState([]);
   const [turn, setTurn] = useState("X");
   const [player, setPlayer] = useState(null);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     socket.onopen = () => {
-      socket.send(JSON.stringify({ type: "join", gameId }));
+      socket.send(JSON.stringify({ type: "list" }));
     };
 
     socket.onmessage = (message) => {
       const data = JSON.parse(message.data);
+
+      if (data.type === "list") {
+        setGames(data.games);
+      }
 
       if (data.type === "assign") {
         setPlayer(data.player);
@@ -43,6 +48,23 @@ export default function TicTacToe() {
   return (
     <div className="flex flex-col items-center p-4">
       <h1 className="text-2xl font-bold mb-4">3 en Raya - Multijugador</h1>
+      <h2 className="text-lg font-bold mb-4">Partidas disponibles:</h2>
+      <ul className="mb-4">
+        {games.map((game, index) => (
+          <li key={index}>
+            <button
+              className="text-blue-500 underline"
+              onClick={() =>
+                socket.send(
+                  JSON.stringify({ type: "join", gameId: game["id"] })
+                )
+              }
+            >
+              {game["id"]} ({game["players"]})
+            </button>
+          </li>
+        ))}
+      </ul>
       {message && <p className="text-red-500">{message}</p>}
       <p className="mb-2 text-lg">Eres: {player || "Esperando..."}</p>
       <p className="mb-4 text-lg">Turno de: {turn}</p>
